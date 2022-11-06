@@ -59,7 +59,7 @@ argument_expression_list_opt: argument_expression_list
 |
 ;
 
-argument_expression_list_opt: assignment_expression
+argument_expression_list: assignment_expression
 | argument_expression_list_opt ',' assignment_expression
 ;
 
