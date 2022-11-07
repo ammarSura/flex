@@ -5,22 +5,12 @@ extern int yylex();
 void yyerror(char *s);
 %}
 
-%union {
-    int intval;
-    char *strval;
-}
 
 %token KEYWRD_VOID KEYWRD_INT KEYWRD_CHAR KEYWRD_IF KEYWRD_ELSE KEYWRD_FOR KEYWRD_RETURN
 
-%token INT_CONST 
-%token STRING_CONST CONST ID
+%token INT_CONST STRING_CONST CONST ID
 
 %token LT_EQUAL GT_EQUAL EQUAL NOT_EQUAL LOGIC_AND LOGIC_OR ARW_PTR
-
-%type primary_expression postfix_expression argument_expression_list_opt argument_expression_list unary_expression unary_operator multiplicative_expression additive_expression relational_expression equality_expression logical_AND_expression logical_OR_expression conditional_expression assignment_expression expression
-%type declaration init_declarator type_specifier declarator direct_declarator pointer_opt pointer parameter_list parameter_declaration id_opt initializer
-%type statement compound_statement block_item_list_opt block_item_list block_item expression_statement expression_opt selection_statement iteration_statement jump_statement
-%type translation_unit function_definition declaration_list_opt declaration_list constant_expression
 
 %start translation_unit
 
@@ -60,7 +50,7 @@ argument_expression_list_opt: argument_expression_list
 ;
 
 argument_expression_list: assignment_expression
-| argument_expression_list_opt ',' assignment_expression
+| argument_expression_list ',' assignment_expression
 ;
 
 unary_expression: postfix_expression
@@ -105,15 +95,15 @@ logical_OR_expression: logical_AND_expression
 | logical_OR_expression LOGIC_OR logical_AND_expression
 ;
 
-conditional_expression: logical_OR_expression
+conditional_expression: logical_OR_expression '?' expression ':' logical_AND_expression
 | logical_OR_expression '?' expression ':' conditional_expression
 ;
 
-assignment_expression: conditional_expression
+assignment_expression: conditional_expression ';'
 | unary_expression '=' assignment_expression
 ;
 
-expression: assignment_expression
+expression: assignment_expression ';'
 ;
 
 declaration: type_specifier init_declarator ';'
@@ -131,9 +121,13 @@ type_specifier: KEYWRD_VOID
 declarator: pointer_opt direct_declarator
 ;
 
+parameter_list_opt: parameter_list
+|
+;
+
 direct_declarator: ID
-| ID '[' constant_expression ']'
-| ID '[' parameter_list ']'
+| ID '[' INT_CONST ']'
+| ID '[' parameter_list_opt ']'
 ;
 
 pointer_opt: pointer
@@ -150,7 +144,7 @@ parameter_list: parameter_declaration
 parameter_declaration: type_specifier pointer_opt id_opt
 ;
 
-id_opt: ID
+id_opt: ID ';'
 |
 ;
 
@@ -200,10 +194,10 @@ translation_unit: function_definition
 | declaration
 ;
 
-function_definition: type_specifier declaration_list_opt compound_statement
+function_definition: type_specifier declarator '(' declaration_list_opt ')' compound_statement
 ;
 
-declaration_list_opt: declaration_list
+declaration_list_opt: declaration_list ';'
 |
 ;
 

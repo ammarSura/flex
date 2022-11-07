@@ -1,7 +1,10 @@
-create-lexer:
-	flex A2_15.l;
-	gcc lex.yy.c A2_15.c -ll;
-	./a.out < A2_15.nc;
+parser:
+	flex --debug A2_15.l
+	yacc -dtv A2_15.y
+	g++ -c lex.yy.c
+	g++ -c y.tab.c 
+	g++ lex.yy.o y.tab.o -ll
+	./a.out < A2_15.nc
 
 
 
