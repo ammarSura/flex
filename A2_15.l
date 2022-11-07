@@ -16,8 +16,6 @@ ELSE "else"
 FOR "for"
 RETURN "return"
 VOID "void"
-COMMENT_SINGLE "\/\/".*
-COMMENT_MULTI "/*"([^*]*|(\*+[^/]))*"*/"
 
 BRACKETS [\{\}]|[\[\]]|[\(\)]
 OPERATORS [\+\-\*\/%=!&\|!\?]|"->"
@@ -32,15 +30,25 @@ WS [ ]+
 
 NEWLINE [\n]
 
+%x MULTILINE_COMMENT_NC    
+%x SINGLELINE_COMMENT_NC
 
-
-/* Definitions of Rules \& Actions */
 %%
+
+
+"/*"            {BEGIN(MULTILINE_COMMENT_NC); }
+<MULTILINE_COMMENT_NC>"*/" {BEGIN(INITIAL); }
+<MULTILINE_COMMENT_NC>\n   {}
+<MULTILINE_COMMENT_NC>.    {}
+
+"//"            { BEGIN(SINGLELINE_COMMENT_NC); }
+<SINGLELINE_COMMENT_NC>\n    {BEGIN(INITIAL); }
+<SINGLELINE_COMMENT_NC>. {}
+
     /* Whitespace Rules */
 {NEWLINE}   {  /* Newline Rule */ }
 {WS}        { /* Ignore Whitespace */ }
-{COMMENT_SINGLE} { /* Ignore Comments */ } /* Comment Rule */
-{COMMENT_MULTI}   { /* Ignore Comments */ } /* Comment Rule */
+
     /* Keyword Rules */
 
 {INT} {return (KEYWRD_INT);}      
@@ -59,27 +67,16 @@ NEWLINE [\n]
 "<=" {return (LT_EQUAL);}
 ">=" {return (GT_EQUAL);}
 "->" {return (ARW_PTR);}
-{BRACKETS}      { return *yytext; /* Punctuator Rule */ }
-{OPERATORS}      { return *yytext; /* Punctuator Rule */ }
-{PUNCTUATION}      {return *yytext; /* Punctuator Rule */ }
+{BRACKETS}      { return yytext[0]; /* Punctuator Rule */ }
+{OPERATORS}      { return yytext[0]; /* Punctuator Rule */ }
+{PUNCTUATION}      {return yytext[0]; /* Punctuator Rule */ }
 
 {ID}        { return (ID); /* Identifier Rule & yytext points to lexeme */}
     /* Constant Rules */
-{CHAR_CONSTANT} { return *yytext; /* Constant Rule */ }
-{STRING_CONSTANT} {return (STRING_CONST) /* Constant Rule */ }
-{INTEGER_CONSTANT} { return (INTEGER_CONSTANT); /* Constant Rule */ }
-{SEMICOLON} {return (SEMICOLON) /* Constant Rule */ }
+{CHAR_CONSTANT} { return yytext[0]; /* Constant Rule */ }
+{STRING_CONSTANT} {return (STRING_CONST); /* Constant Rule */ }
+{INTEGER_CONSTANT} { return (INT_CONST); /* Constant Rule */ }
+{SEMICOLON} {return yytext[0]; /* Constant Rule */ }
 
 
 %%
-
-/* C functions */
-
-yywrap() {}
-
-int main() {
-    yyin = fopen("A2_15.nc", "r");
-    yylex();
-
-    return 0;
-}
