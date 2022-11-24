@@ -1,2 +1,1 @@
-# flex
- Flex spec for nanoC for PLDI with test nanoC file.
+Implementation of nanoC from PPD spec
