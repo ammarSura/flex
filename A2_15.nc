@@ -1,7 +1,0 @@
-int main() { 
-    int x;
-    int y;
-    x = 2 % 6;
-    y = 3;
-    x = 5 + y * 4;
-}
