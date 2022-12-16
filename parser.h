@@ -7,10 +7,10 @@ typedef struct symtab {
 	int value;
 } symboltable;
 
-symboltable *symlook(char *);
+static symboltable *symlook(char *);
 
 #define NSYMS 20
-symboltable symtab[NSYMS];
+static symboltable symtab[NSYMS];
 
 /* TAC generation support */
 symboltable *gentemp();

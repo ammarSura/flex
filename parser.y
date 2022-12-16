@@ -1,7 +1,8 @@
 %{
 #include <string.h>
+#include <stdio.h>
 #include <iostream>
-// #include "parser.h"
+#include "parser.h"
 
 extern int yylex();
 void yyerror(char *s);
@@ -9,16 +10,18 @@ void yyerror(char *s);
 // int quadPtr = 0; // Index of next quad
 %}
 
-/* %union { // Placeholder for a value
-	symboltable *symp;
-} */
+%union { // Placeholder for a value
+	struct symtab *symp;
+    int intval;
+} 
 /* %token <symp> NAME */
 
 
 %start translation_unit
 
-%token KEYWRD_VOID KEYWRD_INT KEYWRD_CHAR KEYWRD_IF KEYWRD_ELSE KEYWRD_FOR KEYWRD_RETURN
-%token INT_CONST STRING_CONST CONST ID
+%token KEYWRD_VOID <symp>KEYWRD_INT KEYWRD_CHAR KEYWRD_IF KEYWRD_ELSE KEYWRD_FOR KEYWRD_RETURN
+%token <intval>INT_CONST 
+%token STRING_CONST CONST ID
 %token LT_EQUAL GT_EQUAL EQUAL NOT_EQUAL LOGIC_AND LOGIC_OR ARW_PTR
 
 /* %type <symp> KEYWRD_INT */
@@ -296,7 +299,10 @@ declaration_list: declaration
 ;
 
 constant_expression: INT_CONST
-    {printf("constant_expression -> INT_CONST\n");}
+    {   
+        printf("hex, %d\n", $1);
+        printf("constant_expression -> INT_CONST, \n");
+    }
 | CONST 
     {printf("constant_expression -> CONST\n");}
 ;
