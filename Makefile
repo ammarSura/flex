@@ -1,4 +1,4 @@
-parser:
+compiler:
 	flex --debug lexer.l
 	yacc -dtv parser.y
 	g++ -c lex.yy.c
