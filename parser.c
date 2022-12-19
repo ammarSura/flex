@@ -81,14 +81,7 @@ quad *new_quad_unary(opcodeType op1, char *s1, char *s2) {
 
 void print_quad(quad* q) {
 	if ((q->op <= DIV) && (q->op >= PLUS)) { // Binary Op
-		printf("%s = %s ", q->result, q->arg1);
-		switch (q->op) {
-			case PLUS: printf("+"); break;
-			case MINUS: printf("-"); break;
-			case MULT: printf("*"); break;
-			case DIV: printf("/"); break;
-		}
-		printf(" %s\n", q->arg2);
+		printf("%s = %s %s %s ", q->result, q->arg1, q->op, q->arg2);
 	}
 	else
 	if (q->op == UNARYMINUS) // Unary Op
