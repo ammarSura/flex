@@ -481,15 +481,15 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    51,    51,    53,    55,    57,    61,    63,    65,    67,
-      71,    73,    76,    78,    82,    84,    88,    90,    92,    94,
-      96,   100,   102,   104,   106,   110,   112,   114,   118,   120,
-     122,   124,   126,   130,   132,   134,   138,   140,   144,   146,
-     150,   152,   156,   158,   162,   166,   170,   172,   177,   178,
-     180,   182,   186,   190,   192,   194,   198,   200,   203,   207,
-     209,   213,   217,   219,   222,   226,   228,   230,   232,   234,
-     238,   242,   244,   247,   249,   253,   255,   259,   263,   265,
-     268,   270,   274,   278,   282,   284,   288,   292,   294,   297,
-     299,   303,   308
+      71,    74,    77,    79,    83,    85,    89,    94,    96,    98,
+     100,   104,   106,   108,   110,   114,   116,   118,   122,   124,
+     126,   128,   130,   134,   136,   138,   142,   144,   148,   150,
+     154,   156,   160,   162,   166,   170,   174,   176,   181,   182,
+     184,   186,   190,   194,   196,   198,   202,   204,   207,   211,
+     213,   217,   221,   223,   226,   230,   232,   234,   236,   238,
+     242,   246,   248,   251,   253,   257,   259,   263,   267,   269,
+     272,   274,   278,   282,   286,   288,   292,   296,   298,   301,
+     303,   307,   312
 };
 #endif
 
@@ -1512,27 +1512,27 @@ yyreduce:
 
   case 3:
 #line 54 "parser.y"
-    {printf("primary_expression -> constant_expression\n");}
+    {(yyval.symp) = (yyvsp[(1) - (1)].symp), printf("primary_expression -> constant_expression\n");}
     break;
 
   case 4:
 #line 56 "parser.y"
-    {printf("primary_expression -> STRING_CONST");}
+    {(yyval.symp) = (yyvsp[(1) - (1)].symp), printf("primary_expression -> STRING_CONST");}
     break;
 
   case 5:
 #line 58 "parser.y"
-    {printf("primary_expression -> '(' expression ')");}
+    {(yyval.symp) = (yyvsp[(2) - (3)].symp), printf("primary_expression -> '(' expression ')");}
     break;
 
   case 6:
 #line 62 "parser.y"
-    {printf("postfix_expression -> primary_expression\n");}
+    {(yyval.symp) = (yyvsp[(1) - (1)].symp), printf("postfix_expression -> primary_expression\n");}
     break;
 
   case 7:
 #line 64 "parser.y"
-    {printf("postfix_expression -> postfix_expression '[' expression ']'\n");}
+    { printf("postfix_expression -> postfix_expression '[' expression ']'\n");}
     break;
 
   case 8:
@@ -1547,376 +1547,384 @@ yyreduce:
 
   case 10:
 #line 72 "parser.y"
-    {printf("argument_expression_list_opt -> argument_expression_list\n");}
+    {(yyval.symp) = (yyvsp[(1) - (1)].symp), printf("argument_expression_list_opt -> argument_expression_list\n");}
+    break;
+
+  case 11:
+#line 74 "parser.y"
+    {(yyval.symp) = NULL, printf("argument_expression_list_opt -> %epmty\n");}
     break;
 
   case 12:
-#line 77 "parser.y"
-    {printf("argument_expression_list -> assignment_expression\n");}
+#line 78 "parser.y"
+    {(yyval.symp) = (yyvsp[(1) - (1)].symp), printf("argument_expression_list -> assignment_expression\n");}
     break;
 
   case 13:
-#line 79 "parser.y"
-    {printf("argument_expression_list -> argument_expression_list ',' assignment_expression\n");}
+#line 80 "parser.y"
+    {(yyval.symp) = (yyvsp[(1) - (3)].symp), (yyvsp[(3) - (3)].symp), printf("argument_expression_list -> argument_expression_list ',' assignment_expression\n");}
     break;
 
   case 14:
-#line 83 "parser.y"
+#line 84 "parser.y"
     {printf("unary_expression -> postfix_expression\n");}
     break;
 
   case 15:
-#line 85 "parser.y"
+#line 86 "parser.y"
     {printf("unary_expression -> unary_operator unary_expression\n");}
     break;
 
   case 16:
-#line 89 "parser.y"
-    {printf("unary_operator -> '&'\n");}
+#line 90 "parser.y"
+    {
+        // $$ = '&';
+        printf("unary_operator opx-> &\n");
+        }
     break;
 
   case 17:
-#line 91 "parser.y"
+#line 95 "parser.y"
     {printf("unary_operator -> '*'\n");}
     break;
 
   case 18:
-#line 93 "parser.y"
+#line 97 "parser.y"
     {printf("unary_operator -> '+'\n");}
     break;
 
   case 19:
-#line 95 "parser.y"
+#line 99 "parser.y"
     {printf("unary_operator -> '-'\n");}
     break;
 
   case 20:
-#line 97 "parser.y"
+#line 101 "parser.y"
     {printf("unary_operator -> '!'\n");}
     break;
 
   case 21:
-#line 101 "parser.y"
+#line 105 "parser.y"
     {printf("multiplicative_expression -> unary_expression\n");}
     break;
 
   case 22:
-#line 103 "parser.y"
+#line 107 "parser.y"
     {printf("multiplicative_expression -> multiplicative_expression '*' unary_expression\n");}
     break;
 
   case 23:
-#line 105 "parser.y"
+#line 109 "parser.y"
     {printf("multiplicative_expression -> multiplicative_expression '/' unary_expression\n");}
     break;
 
   case 24:
-#line 107 "parser.y"
+#line 111 "parser.y"
     {printf("multiplicative_expression -> multiplicative_expression '%' unary_expression\n");}
     break;
 
   case 25:
-#line 111 "parser.y"
+#line 115 "parser.y"
     {printf("additive_expression -> multiplicative_expression\n");}
     break;
 
   case 26:
-#line 113 "parser.y"
+#line 117 "parser.y"
     {printf("additive_expression -> additive_expression '+' multiplicative_expression\n");}
     break;
 
   case 27:
-#line 115 "parser.y"
+#line 119 "parser.y"
     {printf("additive_expression -> additive_expression '-' multiplicative_expression\n");}
     break;
 
   case 28:
-#line 119 "parser.y"
+#line 123 "parser.y"
     {printf("relational_expression -> additive_expression\n");}
     break;
 
   case 29:
-#line 121 "parser.y"
+#line 125 "parser.y"
     {printf("relational_expression -> relational_expression '<' additive_expression\n");}
     break;
 
   case 30:
-#line 123 "parser.y"
+#line 127 "parser.y"
     {printf("relational_expression -> relational_expression '>' additive_expression\n");}
     break;
 
   case 31:
-#line 125 "parser.y"
+#line 129 "parser.y"
     {printf("relational_expression -> relational_expression LT_EQUAL additive_expression\n");}
     break;
 
   case 32:
-#line 127 "parser.y"
+#line 131 "parser.y"
     {printf("relational_expression -> relational_expression GT_EQUAL additive_expression\n");}
     break;
 
   case 33:
-#line 131 "parser.y"
+#line 135 "parser.y"
     {printf("equality_expression -> relational_expression\n");}
     break;
 
   case 34:
-#line 133 "parser.y"
+#line 137 "parser.y"
     {printf("equality_expression -> equality_expression EQUAL relational_expression\n");}
     break;
 
   case 35:
-#line 135 "parser.y"
+#line 139 "parser.y"
     {printf("equality_expression -> equality_expression NOT_EQUAL relational_expression\n");}
     break;
 
   case 36:
-#line 139 "parser.y"
+#line 143 "parser.y"
     {printf("logical_AND_expression -> equality_expression\n");}
     break;
 
   case 37:
-#line 141 "parser.y"
+#line 145 "parser.y"
     {printf("logical_AND_expression -> logical_AND_expression LOGIC_AND equality_expression\n");}
     break;
 
   case 38:
-#line 145 "parser.y"
+#line 149 "parser.y"
     {printf("logical_OR_expression -> logical_AND_expression\n");}
     break;
 
   case 39:
-#line 147 "parser.y"
+#line 151 "parser.y"
     {printf("logical_OR_expression -> logical_OR_expression LOGIC_OR logical_AND_expression\n");}
     break;
 
   case 40:
-#line 151 "parser.y"
+#line 155 "parser.y"
     {printf("conditional_expression -> logical_OR_expression\n");}
     break;
 
   case 41:
-#line 153 "parser.y"
+#line 157 "parser.y"
     {printf("conditional_expression -> logical_OR_expression '?' expression ':' conditional_expression\n");}
     break;
 
   case 42:
-#line 157 "parser.y"
+#line 161 "parser.y"
     {printf("assignment_expression -> conditional_expression\n");}
     break;
 
   case 43:
-#line 159 "parser.y"
+#line 163 "parser.y"
     {printf("assignment_expression -> unary_expression '=' assignment_expression\n");}
     break;
 
   case 44:
-#line 163 "parser.y"
+#line 167 "parser.y"
     {printf("expression -> assignment_expression\n");}
     break;
 
   case 45:
-#line 167 "parser.y"
+#line 171 "parser.y"
     {printf("declaration -> type_specifier init_declarator ';'\n");}
     break;
 
   case 46:
-#line 171 "parser.y"
+#line 175 "parser.y"
     {printf("init_declarator -> declarator\n");}
     break;
 
   case 47:
-#line 173 "parser.y"
+#line 177 "parser.y"
     {printf("init_declarator -> declarator '=' initializer\n");}
     break;
 
   case 48:
-#line 177 "parser.y"
+#line 181 "parser.y"
     {printf("type_specifier -> null\n");}
     break;
 
   case 49:
-#line 179 "parser.y"
+#line 183 "parser.y"
     {printf("type_specifier -> KEYWRD_VOID\n");}
     break;
 
   case 50:
-#line 181 "parser.y"
+#line 185 "parser.y"
     {printf("type_specifier -> KEYWRD_INT %s\n");}
     break;
 
   case 51:
-#line 183 "parser.y"
+#line 187 "parser.y"
     {printf("type_specifier -> KEYWRD_CHAR\n");}
     break;
 
   case 53:
-#line 191 "parser.y"
+#line 195 "parser.y"
     {printf("direct_declarator -> ID\n");}
     break;
 
   case 54:
-#line 193 "parser.y"
+#line 197 "parser.y"
     {printf("direct_declarator -> ID '[' INT_CONST ']'\n");}
     break;
 
   case 55:
-#line 195 "parser.y"
+#line 199 "parser.y"
     {printf("direct_declarator -> ID '[' parameter_list ']'\n");}
     break;
 
   case 56:
-#line 199 "parser.y"
+#line 203 "parser.y"
     {printf("pointer_opt -> pointer\n");}
     break;
 
   case 58:
-#line 204 "parser.y"
+#line 208 "parser.y"
     {printf("pointer -> '*'\n");}
     break;
 
   case 59:
-#line 208 "parser.y"
+#line 212 "parser.y"
     {printf("parameter_list -> parameter_declaration\n");}
     break;
 
   case 60:
-#line 210 "parser.y"
+#line 214 "parser.y"
     {printf("parameter_list -> parameter_list ',' parameter_declaration\n");}
     break;
 
   case 61:
-#line 214 "parser.y"
+#line 218 "parser.y"
     {printf("parameter_declaration -> type_specifier pointer_opt id_opt\n");}
     break;
 
   case 62:
-#line 218 "parser.y"
+#line 222 "parser.y"
     {printf("id_opt -> ID ';'\n");}
     break;
 
   case 64:
-#line 223 "parser.y"
+#line 227 "parser.y"
     {printf("initializer -> assignment_expression\n");}
     break;
 
   case 65:
-#line 227 "parser.y"
+#line 231 "parser.y"
     {printf("statement -> expression_statement\n");}
     break;
 
   case 66:
-#line 229 "parser.y"
+#line 233 "parser.y"
     {printf("statement -> compound_statement\n");}
     break;
 
   case 67:
-#line 231 "parser.y"
+#line 235 "parser.y"
     {printf("statement -> selection_statement\n");}
     break;
 
   case 68:
-#line 233 "parser.y"
+#line 237 "parser.y"
     {printf("statement -> iteration_statement\n");}
     break;
 
   case 69:
-#line 235 "parser.y"
+#line 239 "parser.y"
     {printf("statement -> jump_statement\n");}
     break;
 
   case 70:
-#line 239 "parser.y"
+#line 243 "parser.y"
     {printf("compound_statement -> '{' block_item_list_opt '}'\n");}
     break;
 
   case 71:
-#line 243 "parser.y"
+#line 247 "parser.y"
     {printf("block_item_list_opt -> block_item_list\n");}
     break;
 
   case 73:
-#line 248 "parser.y"
+#line 252 "parser.y"
     {printf("block_item_list -> block_item\n");}
     break;
 
   case 74:
-#line 250 "parser.y"
+#line 254 "parser.y"
     {printf("block_item_list -> block_item_list block_item\n");}
     break;
 
   case 75:
-#line 254 "parser.y"
+#line 258 "parser.y"
     {printf("block_item -> declaration\n");}
     break;
 
   case 76:
-#line 256 "parser.y"
+#line 260 "parser.y"
     {printf("block_item -> statement\n");}
     break;
 
   case 77:
-#line 260 "parser.y"
+#line 264 "parser.y"
     {printf("expression_statement -> expression_opt");}
     break;
 
   case 78:
-#line 264 "parser.y"
+#line 268 "parser.y"
     {printf("expression_opt -> expression ';'\n");}
     break;
 
   case 80:
-#line 269 "parser.y"
+#line 273 "parser.y"
     {printf("selection_statement -> KEYWRD_IF '(' expression ')' statement\n");}
     break;
 
   case 81:
-#line 271 "parser.y"
+#line 275 "parser.y"
     {printf("selection_statement -> KEYWRD_IF '(' expression ')' statement KEYWRD_ELSE statement\n");}
     break;
 
   case 82:
-#line 275 "parser.y"
+#line 279 "parser.y"
     {printf("iteration_statement -> KEYWRD_FOR '(' expression_opt ';' expression_opt ';' expression_opt ')' statement\n");}
     break;
 
   case 83:
-#line 279 "parser.y"
+#line 283 "parser.y"
     {printf("jump_statement -> KEYWRD_RETURN expression_opt ';'\n");}
     break;
 
   case 84:
-#line 283 "parser.y"
+#line 287 "parser.y"
     {printf("translation_unit -> function_definition\n");}
     break;
 
   case 85:
-#line 285 "parser.y"
+#line 289 "parser.y"
     {printf("translation_unit -> declaration\n");}
     break;
 
   case 86:
-#line 289 "parser.y"
+#line 293 "parser.y"
     {printf("function_definition -> type_specifier declarator '(' declaration_list_opt ')' compound_statement\n");}
     break;
 
   case 87:
-#line 293 "parser.y"
+#line 297 "parser.y"
     {printf("declaration_list_opt -> declaration_list ';'\n");}
     break;
 
   case 89:
-#line 298 "parser.y"
+#line 302 "parser.y"
     {printf("declaration_list -> declaration\n");}
     break;
 
   case 90:
-#line 300 "parser.y"
+#line 304 "parser.y"
     {printf("declaration_list -> declaration_list declaration ';'\n");}
     break;
 
   case 91:
-#line 304 "parser.y"
+#line 308 "parser.y"
     {   
         printf("hex, %d\n", (yyvsp[(1) - (1)].intval));
         printf("constant_expression -> INT_CONST, \n");
@@ -1924,13 +1932,16 @@ yyreduce:
     break;
 
   case 92:
-#line 309 "parser.y"
-    {printf("constant_expression -> CONST\n");}
+#line 313 "parser.y"
+    {
+        (yyval.symp) = (yyvsp[(1) - (1)].symp);
+        printf("constant_expression -> CONST\n");
+    }
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1934 "y.tab.c"
+#line 1945 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2144,7 +2155,7 @@ yyreturn:
 }
 
 
-#line 312 "parser.y"
+#line 319 "parser.y"
 
 
 void yyerror(char *s) {
