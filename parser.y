@@ -51,17 +51,17 @@ int quadPtr = 0; // Index of next quad
 primary_expression: ID
     {$$ = $1, printf("primary_expression -> ID\n");}
 | constant_expression
-    {printf("primary_expression -> constant_expression\n");}
+    {$$ = $1, printf("primary_expression -> constant_expression\n");}
 | STRING_CONST
-    {printf("primary_expression -> STRING_CONST");}
-| '(' expression ')'
-    {printf("primary_expression -> '(' expression ')");}
+    {$$ = $1, printf("primary_expression -> STRING_CONST");}
+| '(' expression ')' 
+    {$$ = $2, printf("primary_expression -> '(' expression ')");}
 ;
 
 postfix_expression: primary_expression
-    {printf("postfix_expression -> primary_expression\n");}
+    {$$ = $1, printf("postfix_expression -> primary_expression\n");}
 | postfix_expression '[' expression ']'
-    {printf("postfix_expression -> postfix_expression '[' expression ']'\n");}
+    { printf("postfix_expression -> postfix_expression '[' expression ']'\n");}
 | postfix_expression '(' argument_expression_list_opt ')'
     {printf("postfix_expression -> postfix_expression '(' argument_expression_list_opt ')'\n");}
 | postfix_expression ARW_PTR ID
@@ -69,14 +69,15 @@ postfix_expression: primary_expression
 ;
 
 argument_expression_list_opt: argument_expression_list
-    {printf("argument_expression_list_opt -> argument_expression_list\n");}
-|
+    {$$ = $1, printf("argument_expression_list_opt -> argument_expression_list\n");}
+| /* empty */
+    {$$ = NULL, printf("argument_expression_list_opt -> %epmty\n");}
 ;
 
 argument_expression_list: assignment_expression
-    {printf("argument_expression_list -> assignment_expression\n");}
+    {$$ = $1, printf("argument_expression_list -> assignment_expression\n");}
 | argument_expression_list ',' assignment_expression
-    {printf("argument_expression_list -> argument_expression_list ',' assignment_expression\n");}
+    {$$ = $1, $3, printf("argument_expression_list -> argument_expression_list ',' assignment_expression\n");}
 ;
 
 unary_expression: postfix_expression
