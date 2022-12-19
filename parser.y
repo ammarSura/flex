@@ -311,7 +311,7 @@ declaration_list: declaration
 constant_expression: INT_CONST
     {$$ = $1, printf("constant_expression -> INT_CONST, \n");}
 | CONST 
-    {printf("constant_expression -> CONST\n");}
+    {$$ = $1, printf("constant_expression -> CONST\n");}
 ;
 
 %%
