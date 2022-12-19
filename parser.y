@@ -87,7 +87,10 @@ unary_expression: postfix_expression
 ;
 
 unary_operator: '&'
-    {printf("unary_operator -> '&'\n");}
+    {
+        // $$ = '&';
+        printf("unary_operator opx-> &\n");
+        }
 | '*'
     {printf("unary_operator -> '*'\n");}
 | '+'
@@ -308,7 +311,7 @@ declaration_list: declaration
 constant_expression: INT_CONST
     {$$ = $1, printf("constant_expression -> INT_CONST, \n");}
 | CONST 
-    {$$ = $1, printf("constant_expression -> CONST\n");}
+    {printf("constant_expression -> CONST\n");}
 ;
 
 %%
