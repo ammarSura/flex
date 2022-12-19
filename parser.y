@@ -6,8 +6,8 @@
 
 extern int yylex();
 void yyerror(char *s);
-// quad *`[NSYMS]; // Store of Quads
-// int quadPtr = 0; // Index of next quad
+struct quadarray* array[NSYMS]; // Store of Quads
+int quadPtr = 0; // Index of next quad
 %}
 
 %union { // Placeholder for a value
@@ -19,10 +19,12 @@ void yyerror(char *s);
 
 %start translation_unit
 
-%token KEYWRD_VOID <symp>KEYWRD_INT KEYWRD_CHAR KEYWRD_IF KEYWRD_ELSE KEYWRD_FOR KEYWRD_RETURN
+%token <symp>KEYWRD_VOID KEYWRD_INT KEYWRD_CHAR KEYWRD_IF KEYWRD_ELSE KEYWRD_FOR KEYWRD_RETURN
 %token <intval>INT_CONST 
-%token STRING_CONST CONST ID
-%token LT_EQUAL GT_EQUAL EQUAL NOT_EQUAL LOGIC_AND LOGIC_OR ARW_PTR
+%token <symp>STRING_CONST CONST ID
+%token <symp>LT_EQUAL GT_EQUAL EQUAL NOT_EQUAL LOGIC_AND LOGIC_OR ARW_PTR
+
+%type <symp> primary_expression postfix_expression argument_expression_list_opt argument_expression_list assignment_expression unary_expression unary_operator multiplicative_expression additive_expression relational_expression equality_expression logical_AND_expression logical_OR_expression conditional_expression expression declaration type_specifier init_declarator constant_expression declarator direct_declarator parameter_list parameter_declaration pointer_opt statement pointer compound_statement id_opt expression_statement selection_statement iteration_statement jump_statement translation_unit function_definition declaration_list initializer block_item_list block_item block_item_list_opt 
 
 /* %type <symp> KEYWRD_INT */
 
@@ -47,7 +49,7 @@ void yyerror(char *s);
 
 %%
 primary_expression: ID
-    {printf("primary_expression -> ID\n");}
+    {$$ = $1, printf("primary_expression -> ID\n");}
 | constant_expression
     {printf("primary_expression -> constant_expression\n");}
 | STRING_CONST

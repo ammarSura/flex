@@ -1,7 +1,9 @@
 %{
-// #include "parser.h"
+#include "parser.h"
+#include "parser.c"
 #include "y.tab.h" 
-#include <stdio.h>  
+#include <stdio.h>
+
 void yyerror (const char * msg) {
     fprintf(stderr, "C-like : %s\n", msg);
     exit(1);
@@ -53,7 +55,8 @@ NEWLINE [\n]
     /* Keyword Rules */
 
 {INT}       {
-                //yylval.symp = symlook(yytext);
+                yylval.symp = symlook(yytext);
+                printf("bez = %s\n", yytext);
                 return (KEYWRD_INT);
             }      
 {CHAR}      {   
@@ -138,6 +141,8 @@ NEWLINE [\n]
                     }
 {INTEGER_CONSTANT}  { 
                         //yylval.symp = symlook(yytext);
+                        yylval.intval = atoi(yytext);
+                        // printf("bez = %s\n", yytext);
                         return (INT_CONST); /* Constant Rule */ 
                     }
 {SEMICOLON}         {
