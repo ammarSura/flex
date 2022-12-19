@@ -24,7 +24,7 @@ int quadPtr = 0; // Index of next quad
 %token <symp>STRING_CONST CONST ID
 %token <symp>LT_EQUAL GT_EQUAL EQUAL NOT_EQUAL LOGIC_AND LOGIC_OR ARW_PTR
 
-%type <symp> primary_expression postfix_expression argument_expression_list_opt argument_expression_list assignment_expression unary_expression unary_operator multiplicative_expression additive_expression relational_expression equality_expression logical_AND_expression logical_OR_expression conditional_expression expression declaration type_specifier init_declarator constant_expression declarator direct_declarator parameter_list parameter_declaration pointer_opt statement pointer compound_statement id_opt expression_statement selection_statement iteration_statement jump_statement translation_unit function_definition declaration_list initializer block_item_list block_item block_item_list_opt 
+%type <symp> primary_expression postfix_expression argument_expression_list_opt argument_expression_list assignment_expression unary_expression unary_operator multiplicative_expression additive_expression relational_expression equality_expression logical_AND_expression logical_OR_expression conditional_expression expression declaration type_specifier init_declarator constant_expression declarator direct_declarator parameter_list parameter_declaration pointer_opt statement pointer compound_statement id_opt expression_statement selection_statement iteration_statement jump_statement translation_unit function_definition declaration_list initializer block_item_list block_item block_item_list_opt expression_opt declaration_list_opt
 
 /* %type <symp> KEYWRD_INT */
 
@@ -81,9 +81,9 @@ argument_expression_list: assignment_expression
 ;
 
 unary_expression: postfix_expression
-    {printf("unary_expression -> postfix_expression\n");}
+    {$$ = $1, printf("unary_expression -> postfix_expression\n");}
 | unary_operator unary_expression
-    {printf("unary_expression -> unary_operator unary_expression\n");}
+    {$$ = $1, printf("unary_expression -> unary_operator unary_expression\n");}
 ;
 
 unary_operator: '&'
@@ -197,8 +197,9 @@ direct_declarator: ID
 ;
 
 pointer_opt: pointer
-    {printf("pointer_opt -> pointer\n");}
+    {$$ = $1, printf("pointer_opt -> pointer\n");}
 |
+    {$$ = NULL, printf("pointer_opt -> null\n");}
 ;
 
 pointer: '*'
@@ -206,9 +207,9 @@ pointer: '*'
 ;
 
 parameter_list: parameter_declaration
-    {printf("parameter_list -> parameter_declaration\n");}
+    {$$ = $1, printf("parameter_list -> parameter_declaration\n");}
 | parameter_list ',' parameter_declaration
-    {printf("parameter_list -> parameter_list ',' parameter_declaration\n");}
+    {$$ = $1, $3, printf("parameter_list -> parameter_list ',' parameter_declaration\n");}
 ;
 
 parameter_declaration: type_specifier pointer_opt id_opt
@@ -217,53 +218,56 @@ parameter_declaration: type_specifier pointer_opt id_opt
 
 id_opt: ID ';'
     {printf("id_opt -> ID ';'\n");}
-|
+| /* empty */
+    {$$ = NULL, printf("id_opt -> null\n");}
 ;
 
 initializer: assignment_expression
-    {printf("initializer -> assignment_expression\n");}
+    {$$ = $1, printf("initializer -> assignment_expression\n");}
 ;
 
 statement: expression_statement
-    {printf("statement -> expression_statement\n");}
+    {$$ = $1, printf("statement -> expression_statement\n");}
 | compound_statement
-    {printf("statement -> compound_statement\n");}
+    {$$ = $1, printf("statement -> compound_statement\n");}
 | selection_statement
-    {printf("statement -> selection_statement\n");}
+    {$$ = $1, printf("statement -> selection_statement\n");}
 | iteration_statement
-    {printf("statement -> iteration_statement\n");}
+    {$$ = $1, printf("statement -> iteration_statement\n");}
 | jump_statement
-    {printf("statement -> jump_statement\n");}
+    {$$ = $1, printf("statement -> jump_statement\n");}
 ;
 
 compound_statement: '{' block_item_list_opt '}'
-    {printf("compound_statement -> '{' block_item_list_opt '}'\n");}
+    {$$ = $2, printf("compound_statement -> '{' block_item_list_opt '}'\n");}
 ;
 
 block_item_list_opt: block_item_list
-    {printf("block_item_list_opt -> block_item_list\n");}
+    {$$ = $1, printf("block_item_list_opt -> block_item_list\n");}
 |
+    {$$ = NULL, printf("block_item_list_opt -> null\n");}
 ;
 
 block_item_list: block_item
-    {printf("block_item_list -> block_item\n");}
+    {$$ = $1, printf("block_item_list -> block_item\n");}
 | block_item_list block_item
     {printf("block_item_list -> block_item_list block_item\n");}
 ;
 
 block_item: declaration
-    {printf("block_item -> declaration\n");}
+    {$$ = $1, printf("block_item -> declaration\n");}
 | statement
-    {printf("block_item -> statement\n");}
+    {$$ = $1, printf("block_item -> statement\n");}
 ;
 
 expression_statement: expression_opt 
-    {printf("expression_statement -> expression_opt");}
+    {$$ = $1, printf("expression_statement -> expression_opt");}
 ;
 
 expression_opt: expression ';'
-    {printf("expression_opt -> expression ';'\n");}
+    {$$ = $1, printf("expression_opt -> expression ';'\n");}
 |
+    {$$ = NULL, printf("expression_opt -> null\n");}
 ;
 
 selection_statement: KEYWRD_IF '(' expression ')' statement
@@ -281,9 +285,9 @@ jump_statement: KEYWRD_RETURN expression_opt
 ;
 
 translation_unit: function_definition
-    {printf("translation_unit -> function_definition\n");}
+    {$$ = $1, printf("translation_unit -> function_definition\n");}
 | declaration
-    {printf("translation_unit -> declaration\n");}
+    {$$ = $1, printf("translation_unit -> declaration\n");}
 ;
 
 function_definition: type_specifier declarator '(' declaration_list_opt ')' compound_statement
@@ -291,23 +295,20 @@ function_definition: type_specifier declarator '(' declaration_list_opt ')' comp
 ;
 
 declaration_list_opt: declaration_list ';'
-    {printf("declaration_list_opt -> declaration_list ';'\n");}
+    {$$ = $1, printf("declaration_list_opt -> declaration_list ';'\n");}
 |
 ;
 
 declaration_list: declaration
-    {printf("declaration_list -> declaration\n");}
+    {$$ = $1, printf("declaration_list -> declaration\n");}
 | declaration_list declaration ';'
     {printf("declaration_list -> declaration_list declaration ';'\n");}
 ;
 
 constant_expression: INT_CONST
-    {   
-        printf("hex, %d\n", $1);
-        printf("constant_expression -> INT_CONST, \n");
-    }
+    {$$ = $1, printf("constant_expression -> INT_CONST, \n");}
 | CONST 
-    {printf("constant_expression -> CONST\n");}
+    {$$ = $1, printf("constant_expression -> CONST\n");}
 ;
 
 %%
