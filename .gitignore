@@ -3,3 +3,5 @@ lex.yy.c
 lex.yy.o
 y.tab.o
 y.tab.c
+y.output
+y.tab.h

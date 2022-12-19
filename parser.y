@@ -49,48 +49,85 @@ int quadPtr = 0; // Index of next quad
 
 %%
 primary_expression: ID
-    {$$ = $1, printf("primary_expression -> ID\n");}
+    {
+        $$ = $1;
+        printf("primary_expression -> ID\n");
+    }
 | constant_expression
-    {$$ = $1, printf("primary_expression -> constant_expression\n");}
+    {
+        $$ = $1;
+        printf("primary_expression -> constant_expression\n");
+    }
 | STRING_CONST
-    {$$ = $1, printf("primary_expression -> STRING_CONST");}
+    {
+        $$ = $1; 
+        printf("primary_expression -> STRING_CONST");
+    }
 | '(' expression ')' 
-    {$$ = $2, printf("primary_expression -> '(' expression ')");}
+    {
+        $$ = $2; 
+        printf("primary_expression -> '(' expression ')");
+    }
 ;
 
 postfix_expression: primary_expression
-    {$$ = $1, printf("postfix_expression -> primary_expression\n");}
+    {
+        $$ = $1; 
+        printf("postfix_expression -> primary_expression\n");
+    }
 | postfix_expression '[' expression ']'
-    { printf("postfix_expression -> postfix_expression '[' expression ']'\n");}
+    { 
+        printf("postfix_expression -> postfix_expression '[' expression ']'\n");
+    }
 | postfix_expression '(' argument_expression_list_opt ')'
-    {printf("postfix_expression -> postfix_expression '(' argument_expression_list_opt ')'\n");}
+    {
+        printf("postfix_expression -> postfix_expression '(' argument_expression_list_opt ')'\n");
+    }
 | postfix_expression ARW_PTR ID
-    {printf("postfix_expression -> postfix_expression ARW_PTR ID\n");}
+    {
+        printf("postfix_expression -> postfix_expression ARW_PTR ID\n");
+    }
 ;
 
 argument_expression_list_opt: argument_expression_list
-    {$$ = $1, printf("argument_expression_list_opt -> argument_expression_list\n");}
+    {
+        $$ = $1, printf("argument_expression_list_opt -> argument_expression_list\n");
+    }
 | /* empty */
-    {$$ = NULL, printf("argument_expression_list_opt -> %epmty\n");}
+    {
+        $$ = NULL, printf("argument_expression_list_opt -> %epmty\n");
+    }
 ;
 
 argument_expression_list: assignment_expression
-    {$$ = $1, printf("argument_expression_list -> assignment_expression\n");}
+    {
+        $$ = $1;
+        printf("argument_expression_list -> assignment_expression\n");
+    }
 | argument_expression_list ',' assignment_expression
-    {$$ = $1, $3, printf("argument_expression_list -> argument_expression_list ',' assignment_expression\n");}
+    {
+        $$ = $1, $3; 
+        printf("argument_expression_list -> argument_expression_list ',' assignment_expression\n");
+    }
 ;
 
 unary_expression: postfix_expression
-    {$$ = $1, printf("unary_expression -> postfix_expression\n");}
+    {
+        $$ = $1; 
+        printf("unary_expression -> postfix_expression\n");
+    }
 | unary_operator unary_expression
-    {$$ = $1, printf("unary_expression -> unary_operator unary_expression\n");}
+    {
+        $$ = $1; 
+        printf("unary_expression -> unary_operator unary_expression\n");
+    }
 ;
 
 unary_operator: '&'
     {
         // $$ = '&';
         printf("unary_operator opx-> &\n");
-        }
+    }
 | '*'
     {printf("unary_operator -> '*'\n");}
 | '+'
@@ -200,9 +237,15 @@ direct_declarator: ID
 ;
 
 pointer_opt: pointer
-    {$$ = $1, printf("pointer_opt -> pointer\n");}
+    {
+        $$ = $1; 
+        printf("pointer_opt -> pointer\n");
+    }
 |
-    {$$ = NULL, printf("pointer_opt -> null\n");}
+    {
+        $$ = NULL; 
+        printf("pointer_opt -> null\n");
+    }
 ;
 
 pointer: '*'
@@ -210,67 +253,125 @@ pointer: '*'
 ;
 
 parameter_list: parameter_declaration
-    {$$ = $1, printf("parameter_list -> parameter_declaration\n");}
+    {
+        $$ = $1; 
+        printf("parameter_list -> parameter_declaration\n");
+    }
 | parameter_list ',' parameter_declaration
-    {$$ = $1, $3, printf("parameter_list -> parameter_list ',' parameter_declaration\n");}
+    {
+        $$ = $1, $3; 
+        printf("parameter_list -> parameter_list ',' parameter_declaration\n");
+    }
 ;
 
 parameter_declaration: type_specifier pointer_opt id_opt
-    {printf("parameter_declaration -> type_specifier pointer_opt id_opt\n");}
+    {
+        printf("parameter_declaration -> type_specifier pointer_opt id_opt\n");
+    }
 ;
 
 id_opt: ID ';'
-    {printf("id_opt -> ID ';'\n");}
+    {
+        printf("id_opt -> ID ';'\n");
+    }
 | /* empty */
-    {$$ = NULL, printf("id_opt -> null\n");}
+    {
+        $$ = NULL; 
+        printf("id_opt -> null\n");
+    }
 ;
 
 initializer: assignment_expression
-    {$$ = $1, printf("initializer -> assignment_expression\n");}
+    {
+        $$ = $1;
+        printf("initializer -> assignment_expression\n");
+    }
 ;
 
 statement: expression_statement
-    {$$ = $1, printf("statement -> expression_statement\n");}
+    {
+        $$ = $1;
+        printf("statement -> expression_statement\n");
+    }
 | compound_statement
-    {$$ = $1, printf("statement -> compound_statement\n");}
+    {
+        $$ = $1;
+        printf("statement -> copound_statement\n");
+    }
 | selection_statement
-    {$$ = $1, printf("statement -> selection_statement\n");}
+    {
+        $$ = $1; 
+        printf("statement -> selection_statement\n");
+    }
 | iteration_statement
-    {$$ = $1, printf("statement -> iteration_statement\n");}
+    {
+        $$ = $1;
+        printf("statement -> iteration_statement\n");
+    }
 | jump_statement
-    {$$ = $1, printf("statement -> jump_statement\n");}
+    {
+        $$ = $1; 
+        printf("statement -> jump_statement\n");
+    }
 ;
 
 compound_statement: '{' block_item_list_opt '}'
-    {$$ = $2, printf("compound_statement -> '{' block_item_list_opt '}'\n");}
+    {
+        $$ = $2; 
+        printf("compound_statement -> '{' block_item_list_opt '}'\n");
+    }
 ;
 
 block_item_list_opt: block_item_list
-    {$$ = $1, printf("block_item_list_opt -> block_item_list\n");}
+    {
+        $$ = $1, printf("block_item_list_opt -> block_item_list\n");
+    }
 |
-    {$$ = NULL, printf("block_item_list_opt -> null\n");}
+    {
+        $$ = NULL, printf("block_item_list_opt -> null\n");
+    }
 ;
 
 block_item_list: block_item
-    {$$ = $1, printf("block_item_list -> block_item\n");}
+    {
+        $$ = $1;
+        printf("block_item_list -> block_item\n");
+    }
 | block_item_list block_item
-    {printf("block_item_list -> block_item_list block_item\n");}
+    {
+        printf("block_item_list -> block_item_list block_item\n");
+    }
 ;
 
 block_item: declaration
-    {$$ = $1, printf("block_item -> declaration\n");}
+    {
+        $$ = $1;
+        printf("block_item -> declaration\n");
+    }
 | statement
-    {$$ = $1, printf("block_item -> statement\n");}
+    {
+        $$ = $1; 
+        printf("block_item -> statement\n");
+    }
 ;
 
 expression_statement: expression_opt 
-    {$$ = $1, printf("expression_statement -> expression_opt");}
+    {
+        $$ = $1; 
+        printf("expression_statement -> expression_opt");
+    }
 ;
 
 expression_opt: expression ';'
-    {$$ = $1, printf("expression_opt -> expression ';'\n");}
+    {
+        $$ = $1;
+        printf("expression_opt -> expression ';'\n");
+    }
 |
-    {$$ = NULL, printf("expression_opt -> null\n");}
+    {
+        $$ = NULL; 
+        printf("expression_opt -> null\n");
+    }
 ;
 
 selection_statement: KEYWRD_IF '(' expression ')' statement
@@ -288,9 +389,15 @@ jump_statement: KEYWRD_RETURN expression_opt
 ;
 
 translation_unit: function_definition
-    {$$ = $1, printf("translation_unit -> function_definition\n");}
+    {
+        $$ = $1; 
+        printf("translation_unit -> function_definition\n");
+    }
 | declaration
-    {$$ = $1, printf("translation_unit -> declaration\n");}
+    {
+        $$ = $1;
+        printf("translation_unit -> declaration\n");
+    }
 ;
 
 function_definition: type_specifier declarator '(' declaration_list_opt ')' compound_statement
@@ -298,20 +405,31 @@ function_definition: type_specifier declarator '(' declaration_list_opt ')' comp
 ;
 
 declaration_list_opt: declaration_list ';'
-    {$$ = $1, printf("declaration_list_opt -> declaration_list ';'\n");}
+    {
+        $$ = $1;
+        printf("declaration_list_opt -> declaration_list ';'\n");
+    }
 |
 ;
 
 declaration_list: declaration
-    {$$ = $1, printf("declaration_list -> declaration\n");}
+    {
+        $$ = $1; printf("declaration_list -> declaration\n");
+    }
 | declaration_list declaration ';'
     {printf("declaration_list -> declaration_list declaration ';'\n");}
 ;
 
 constant_expression: INT_CONST
-    {$$ = $1, printf("constant_expression -> INT_CONST, \n");}
+    {
+        // $$ = $1; 
+        printf("constant_expression -> INT_CONST, \n");
+    }
 | CONST 
-    {$$ = $1, printf("constant_expression -> CONST\n");}
+    {
+        $$ = $1; 
+        printf("constant_expression -> CONST\n");
+    }
 ;
 
 %%
