@@ -1,1 +1,4 @@
 a.out
+lex.yy.c
+lex.yy.o
+y.tab.o
