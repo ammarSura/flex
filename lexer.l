@@ -15,7 +15,7 @@ void yyerror (const char * msg) {
 INT "int"
 CHAR "char"
 IF "if"
-ELSE "else"
+ELSE "else" 
 FOR "for"
 RETURN "return"
 VOID "void"
